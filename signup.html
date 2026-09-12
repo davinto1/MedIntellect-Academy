@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | MedIntellect Academy</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #123b73;
+            --primary-light: #edf4ff;
+            --bg: #f7f9fc;
+            --surface: #ffffff;
+            --text: #172033;
+            --heading: #111827;
+            --muted: #697386;
+            --border: #dfe5ee;
+            --error: #c62828;
+            --success: #167044;
+        }
+
+        body.dark {
+            --primary: #72aaff;
+            --primary-light: #1c3558;
+            --bg: #0b1220;
+            --surface: #111a2b;
+            --text: #e6edf7;
+            --heading: #ffffff;
+            --muted: #aab5c7;
+            --border: #29374d;
+            --error: #ff8585;
+            --success: #69d39a;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            flex-direction: column;
+            transition: .25s ease;
+        }
+
+        .topbar {
+            width: 100%;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: var(--surface);
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        .page {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 18px 60px;
+        }
+
+        .signup-card {
+            width: 100%;
+            max-width: 470px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 15px 40px rgba(20, 40, 70, .07);
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .heading h1 {
+            color: var(--heading);
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: var(--heading);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            outline: none;
+            background: var(--surface);
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 48px;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            margin: 5px 0 20px;
+        }
+
+        .terms input {
+            width: auto;
+            margin-top: 3px;
+        }
+
+        .terms label {
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .terms a {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .submit-btn:disabled {
+            opacity: .65;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 17px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .message.error {
+            display: block;
+            color: var(--error);
+            background: rgba(198, 40, 40, .08);
+        }
+
+        .message.success {
+            display: block;
+            color: var(--success);
+            background: rgba(22, 112, 68, .08);
+        }
+
+        .login-text {
+            text-align: center;
+            margin-top: 22px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .login-text a {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 500px) {
+            .signup-card {
+                padding: 25px 20px;
+            }
+
+            .heading h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <a href="index.html" class="logo">
+        <div class="logo-icon">M</div>
+        MedIntellect Academy
+    </a>
+
+    <button
+        class="theme-toggle"
+        id="themeToggle"
+        aria-label="Toggle theme">
+        🌙
+    </button>
+
+</header>
+
+
+<main class="page">
+
+    <div class="signup-card">
+
+        <div class="heading">
+            <h1>Create your account</h1>
+            <p>Join MedIntellect Academy and start learning.</p>
+        </div>
+
+
+        <div id="message" class="message"></div>
+
+
+        <form id="signupForm">
+
+            <div class="form-group">
+
+                <label for="fullName">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="fullName"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="level">
+                    Level
+                </label>
+
+                <select id="level" required>
+
+                    <option value="">
+                        Select your level
+                    </option>
+
+                    <option value="100L">100 Level</option>
+                    <option value="200L">200 Level</option>
+                    <option value="300L">300 Level</option>
+                    <option value="400L">400 Level</option>
+                    <option value="500L">500 Level</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="department">
+                    Department
+                </label>
+
+                <input
+                    type="text"
+                    id="department"
+                    placeholder="e.g. Nursing Science"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="university">
+                    University
+                </label>
+
+                <input
+                    type="text"
+                    id="university"
+                    placeholder="Enter your university"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Create a password"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required>
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        id="showPassword">
+                        Show
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="terms">
+
+                <input
+                    type="checkbox"
+                    id="terms"
+                    required>
+
+                <label for="terms">
+                    I agree to use MedIntellect Academy responsibly
+                    and follow the platform rules.
+                </label>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="submit-btn"
+                id="submitBtn">
+                Create Account
+            </button>
+
+        </form>
+
+
+        <p class="login-text">
+            Already have an account?
+            <a href="login.html">Log in</a>
+        </p>
+
+        <a href="index.html" class="back-home">
+            ← Back to Home
+        </a>
+
+    </div>
+
+</main>
+
+
+<script>
+
+/* =========================
+   THEME
+========================= */
+
+const themeToggle =
+    document.getElementById("themeToggle");
+
+const savedTheme =
+    localStorage.getItem("medintellect-theme");
+
+if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+    themeToggle.textContent = "☀️";
+}
+
+themeToggle.addEventListener("click", function () {
+
+    document.body.classList.toggle("dark");
+
+    const dark =
+        document.body.classList.contains("dark");
+
+    themeToggle.textContent =
+        dark ? "☀️" : "🌙";
+
+    localStorage.setItem(
+        "medintellect-theme",
+        dark ? "dark" : "light"
+    );
+
+});
+
+
+/* =========================
+   SHOW PASSWORD
+========================= */
+
+const password =
+    document.getElementById("password");
+
+const showPassword =
+    document.getElementById("showPassword");
+
+showPassword.addEventListener("click", function () {
+
+    if (password.type === "password") {
+
+        password.type = "text";
+        showPassword.textContent = "Hide";
+
+    } else {
+
+        password.type = "password";
+        showPassword.textContent = "Show";
+
+    }
+
+});
+
+
+/* =========================
+   SIGN UP
+========================= */
+
+const signupForm =
+    document.getElementById("signupForm");
+
+const message =
+    document.getElementById("message");
+
+const submitBtn =
+    document.getElementById("submitBtn");
+
+
+signupForm.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    message.className = "message";
+    message.textContent = "";
+
+    const fullName =
+        document.getElementById("fullName").value.trim();
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const level =
+        document.getElementById("level").value;
+
+    const department =
+        document.getElementById("department").value.trim();
+
+    const university =
+        document.getElementById("university").value.trim();
+
+    const passwordValue =
+        document.getElementById("password").value;
+
+
+    if (passwordValue.length < 6) {
+
+        message.className = "message error";
+        message.textContent =
+            "Password must be at least 6 characters.";
+
+        return;
+    }
+
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Creating account...";
+
+
+    try {
+
+        const { data, error } =
+            await supabaseClient.auth.signUp({
+
+                email: email,
+
+                password: passwordValue,
+
+                options: {
+
+                    data: {
+                        full_name: fullName,
+                        level: level,
+                        department: department,
+                        university: university
+                    },
+
+                    emailRedirectTo:
+                        window.location.origin +
+                        "/dashboard.html"
+
+                }
+
+            });
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (data.user && !data.session) {
+
+            message.className =
+                "message success";
+
+            message.textContent =
+                "Account created. Please check your email to confirm your account before logging in.";
+
+            signupForm.reset();
+
+        } else {
+
+            message.className =
+                "message success";
+
+            message.textContent =
+                "Account created successfully. Redirecting...";
+
+            setTimeout(function() {
+
+                window.location.href =
+                    "dashboard.html";
+
+            }, 1000);
+
+        }
+
+    } catch (error) {
+
+        message.className =
+            "message error";
+
+        message.textContent =
+            error.message ||
+            "Something went wrong. Please try again.";
+
+    } finally {
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Create Account";
+
+    }
+
+});
+
+</script>
+
+</body>
+  </html>
