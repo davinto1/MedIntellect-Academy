@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MedIntellect Academy</title>
+
+    <meta name="description" content="MedIntellect Academy is a student learning platform for structured study materials, practice quizzes, past questions and exam preparation.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f9fc;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        /* NAVIGATION */
+
+        .navbar {
+            width: 100%;
+            background: #ffffff;
+            border-bottom: 1px solid #e8ebf0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #123b73;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: #123b73;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            color: #4c566a;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #123b73;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .login-btn,
+        .signup-btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .login-btn {
+            border: 1px solid #d9dee8;
+            background: white;
+            color: #123b73;
+        }
+
+        .signup-btn {
+            border: none;
+            background: #123b73;
+            color: white;
+        }
+
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        /* HERO */
+
+        .hero {
+            background: #ffffff;
+            padding: 90px 24px 80px;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            align-items: center;
+            gap: 70px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: #edf4ff;
+            color: #123b73;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 6vw, 68px);
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+            color: #111827;
+        }
+
+        .hero h1 span {
+            color: #123b73;
+        }
+
+        .hero p {
+            max-width: 600px;
+            color: #657084;
+            font-size: 18px;
+            margin-bottom: 32px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            padding: 14px 23px;
+            border-radius: 9px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+            display: inline-block;
+        }
+
+        .primary-btn {
+            background: #123b73;
+            color: white;
+        }
+
+        .secondary-btn {
+            background: white;
+            color: #123b73;
+            border: 1px solid #d9dee8;
+        }
+
+        /* HERO CARD */
+
+        .hero-card {
+            background: #f3f6fb;
+            border: 1px solid #e3e8f0;
+            border-radius: 20px;
+            padding: 28px;
+        }
+
+        .dashboard-preview {
+            background: white;
+            border-radius: 15px;
+            padding: 22px;
+            box-shadow: 0 15px 40px rgba(25, 50, 90, 0.08);
+        }
+
+        .preview-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .preview-title {
+            font-weight: 800;
+        }
+
+        .preview-status {
+            background: #eaf7ef;
+            color: #237544;
+            padding: 5px 9px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .progress-box {
+            background: #f5f7fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 7px;
+            background: #e2e6ec;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 72%;
+            background: #123b73;
+            border-radius: 10px;
+        }
+
+        .preview-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .mini-card {
+            border: 1px solid #e7eaf0;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .mini-card strong {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 3px;
+        }
+
+        .mini-card span {
+            color: #788397;
+            font-size: 11px;
+        }
+
+        /* GENERAL SECTION */
+
+        section {
+            padding: 80px 24px;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .section-heading {
+            margin-bottom: 35px;
+        }
+
+        .section-heading h2 {
+            font-size: 34px;
+            margin-bottom: 8px;
+            color: #111827;
+        }
+
+        .section-heading p {
+            color: #697386;
+            max-width: 650px;
+        }
+
+        /* COURSES */
+
+        .courses {
+            background: #f7f9fc;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .course-card {
+            background: white;
+            border: 1px solid #e5e9ef;
+            border-radius: 14px;
+            padding: 23px;
+            transition: 0.25s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(20, 40, 70, 0.08);
+        }
+
+        .course-code {
+            color: #123b73;
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .course-card h3 {
+            margin-bottom: 8px;
+            font-size: 19px;
+        }
+
+        .course-card p {
+            color: #6b7485;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .course-link {
+            color: #123b73;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        /* STUDY TOOLS */
+
+        .tools {
+            background: white;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .tool-card {
+            border: 1px solid #e4e8ef;
+            border-radius: 13px;
+            padding: 25px;
+            background: #ffffff;
+        }
+
+        .tool-icon {
+            width: 45px;
+            height: 45px;
+            background: #edf4ff;
+            color: #123b73;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .tool-card h3 {
+            margin-bottom: 8px;
+            font-size: 17px;
+        }
+
+        .tool-card p {
+            color: #717b8d;
+            font-size: 13px;
+        }
+
+        /* COMMUNITY */
+
+        .community {
+            background: #123b73;
+            color: white;
+        }
+
+        .community-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .community h2 {
+            font-size: 35px;
+            margin-bottom: 12px;
+        }
+
+        .community p {
+            color: #dce7f6;
+            max-width: 650px;
+        }
+
+        .community-btn {
+            background: white;
+            color: #123b73;
+            padding: 14px 22px;
+            border-radius: 9px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #101827;
+            color: white;
+            padding: 50px 24px 25px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 50px;
+            padding-bottom: 40px;
+        }
+
+        .footer-brand p {
+            color: #aab3c2;
+            font-size: 14px;
+            max-width: 350px;
+            margin-top: 14px;
+        }
+
+        .footer-column h4 {
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .footer-column a {
+            display: block;
+            color: #aab3c2;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #293241;
+            padding-top: 20px;
+            color: #8e98a8;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 900px) {
+
+            .nav-links,
+            .nav-buttons {
+                display: none;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .course-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-top {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .nav-container {
+                padding: 14px 18px;
+            }
+
+            .hero {
+                padding: 60px 18px;
+            }
+
+            .hero h1 {
+                font-size: 43px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            section {
+                padding: 60px 18px;
+            }
+
+            .section-heading h2 {
+                font-size: 28px;
+            }
+
+            .course-grid,
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .community-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+
+    <nav class="navbar">
+        <div class="nav-container">
+
+            <a href="#" class="logo">
+                <div class="logo-icon">M</div>
+                MedIntellect Academy
+            </a>
+
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#courses">Courses</a>
+                <a href="#tools">Study Materials</a>
+                <a href="#community">Community</a>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="#" class="login-btn">Log in</a>
+                <a href="#" class="signup-btn">Sign Up</a>
+            </div>
+
+            <button class="menu-btn">☰</button>
+
+        </div>
+    </nav>
+
+
+    <!-- HERO -->
+
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-container">
+
+                <div>
+
+                    <span class="hero-badge">
+                        STUDENT LEARNING PLATFORM
+                    </span>
+
+                    <h1>
+                        Learn better.<br>
+                        <span>Understand more.</span>
+                    </h1>
+
+                    <p>
+                        MedIntellect Academy gives students a structured place
+                        to study their courses, practise questions, review past
+                        questions and prepare for examinations.
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <a href="#courses" class="primary-btn">
+                            Explore Courses
+                        </a>
+
+                        <a href="#tools" class="secondary-btn">
+                            Start Studying
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="hero-card">
+
+                    <div class="dashboard-preview">
+
+                        <div class="preview-top">
+
+                            <span class="preview-title">
+                                My Learning
+                            </span>
+
+                            <span class="preview-status">
+                                ACTIVE
+                            </span>
+
+                        </div>
+
+                        <div class="progress-box">
+
+                            <div class="progress-header">
+                                <span>Overall Progress</span>
+                                <strong>72%</strong>
+                            </div>
+
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+
+                        </div>
+
+                        <div class="preview-cards">
+
+                            <div class="mini-card">
+                                <strong>12</strong>
+                                <span>Courses</span>
+                            </div>
+
+                            <div class="mini-card">
+                                <strong>48</strong>
+                                <span>Topics</span>
+                            </div>
+
+                            <div class="mini-card">
+                                <strong>126</strong>
+                                <span>Questions</span>
+                            </div>
+
+                            <div class="mini-card">
+                                <strong>8</strong>
+                                <span>Completed</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- COURSES -->
+
+        <section class="courses" id="courses">
+
+            <div class="section-container">
+
+                <div class="section-heading">
+
+                    <h2>Featured Courses</h2>
+
+                    <p>
+                        Access your courses and study each topic in a
+                        structured way.
+                    </p>
+
+                </div>
+
+
+                <div class="course-grid">
+
+                    <div class="course-card">
+
+                        <div class="course-code">NURSING</div>
+
+                        <h3>Foundation of Nursing</h3>
+
+                        <p>
+                            Study important nursing concepts,
+                            principles and professional foundations.
+                        </p>
+
+                        <a href="#" class="course-link">
+                            Start Learning →
+                        </a>
+
+                    </div>
+
+
+                    <div class="course-card">
+
+                        <div class="course-code">PHYSIOLOGY</div>
+
+                        <h3>GIT Physiology</h3>
+
+                        <p>
+                            Understand the physiology of the
+                            gastrointestinal system and its processes.
+                        </p>
+
+                        <a href="#" class="course-link">
+                            Start Learning →
+                        </a>
+
+                    </div>
+
+
+                    <div class="course-card">
+
+                        <div class="course-code">CHEMISTRY</div>
+
+                        <h3>CHM 102</h3>
+
+                        <p>
+                            Access structured chemistry materials,
+                            revision and practice questions.
+                        </p>
+
+                        <a href="#" class="course-link">
+                            Start Learning →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- STUDY TOOLS -->
+
+        <section class="tools" id="tools">
+
+            <div class="section-container">
+
+                <div class="section-heading">
+
+                    <h2>Everything You Need to Study</h2>
+
+                    <p>
+                        One place for your learning materials,
+                        revision and examination preparation.
+                    </p>
+
+                </div>
+
+
+                <div class="tools-grid">
+
+                    <div class="tool-card">
+
+                        <div class="tool-icon">SM</div>
+
+                        <h3>Study Materials</h3>
+
+                        <p>
+                            Access lecture notes, PDFs and other
+                            course materials.
+                        </p>
+
+                    </div>
+
+
+                    <div class="tool-card">
+
+                        <div class="tool-icon">QZ</div>
+
+                        <h3>Practice Quiz</h3>
+
+                        <p>
+                            Test your understanding with
+                            topic-based practice questions.
+                        </p>
+
+                    </div>
+
+
+                    <div class="tool-card">
+
+                        <div class="tool-icon">PQ</div>
+
+                        <h3>Past Questions</h3>
+
+                        <p>
+                            Revise with previous examination
+                            questions and answers.
+                        </p>
+
+                    </div>
+
+
+                    <div class="tool-card">
+
+                        <div class="tool-icon">EP</div>
+
+                        <h3>Exam Preparation</h3>
+
+                        <p>
+                            Prepare with focused revision,
+                            mock tests and exam resources.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- COMMUNITY -->
+
+        <section class="community" id="community">
+
+            <div class="community-container">
+
+                <div>
+
+                    <h2>Study together.</h2>
+
+                    <p>
+                        Join the MedIntellect Academy student community
+                        to communicate, share ideas and learn with other
+                        students.
+                    </p>
+
+                </div>
+
+                <a href="#" class="community-btn">
+                    Join Community
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="footer-container">
+
+            <div class="footer-top">
+
+                <div class="footer-brand">
+
+                    <div class="logo">
+                        <div class="logo-icon">M</div>
+                        MedIntellect Academy
+                    </div>
+
+                    <p>
+                        A student-focused learning platform built to make
+                        studying more structured, practical and effective.
+                    </p>
+
+                </div>
+
+
+                <div class="footer-column">
+
+                    <h4>Platform</h4>
+
+                    <a href="#">Home</a>
+                    <a href="#courses">Courses</a>
+                    <a href="#tools">Study Materials</a>
+                    <a href="#community">Community</a>
+
+                </div>
+
+
+                <div class="footer-column">
+
+                    <h4>Study</h4>
+
+                    <a href="#">Practice Quiz</a>
+                    <a href="#">Past Questions</a>
+                    <a href="#">Exam Preparation</a>
+                    <a href="#">Progress</a>
+
+                </div>
+
+
+                <div class="footer-column">
+
+                    <h4>Account</h4>
+
+                    <a href="#">Log in</a>
+                    <a href="#">Create Account</a>
+                    <a href="#">Profile</a>
+                    <a href="#">Help</a>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                <span>
+                    © 2026 MedIntellect Academy. All rights reserved.
+                </span>
+
+                <span>
+                    Learn • Understand • Perform
+                </span>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+</body>
+</html>
