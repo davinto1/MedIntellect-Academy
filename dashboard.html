@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard | MedIntellect Academy</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary: #123b73;
+    --primary-light: #edf4ff;
+    --bg: #f7f9fc;
+    --surface: #ffffff;
+    --surface-2: #f3f6fb;
+    --text: #172033;
+    --heading: #111827;
+    --muted: #697386;
+    --border: #e3e8f0;
+    --danger: #c62828;
+}
+
+body.dark {
+    --primary: #72aaff;
+    --primary-light: #1c3558;
+    --bg: #0b1220;
+    --surface: #111a2b;
+    --surface-2: #162238;
+    --text: #e6edf7;
+    --heading: #ffffff;
+    --muted: #aab5c7;
+    --border: #26344a;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    transition: .25s ease;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font-family: inherit;
+}
+
+/* NAVIGATION */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+.nav-container {
+    max-width: 1250px;
+    margin: auto;
+    padding: 13px 22px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--primary);
+    font-weight: 800;
+    margin-right: auto;
+}
+
+.logo-icon {
+    width: 39px;
+    height: 39px;
+    border-radius: 9px;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.theme-btn,
+.menu-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+}
+
+.menu-btn {
+    display: none;
+    font-size: 20px;
+}
+
+/* PAGE */
+
+.page {
+    max-width: 1250px;
+    margin: auto;
+    padding: 35px 22px 70px;
+}
+
+/* WELCOME */
+
+.welcome {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 25px;
+}
+
+.welcome small {
+    color: var(--muted);
+}
+
+.welcome h1 {
+    color: var(--heading);
+    font-size: 30px;
+    margin: 5px 0;
+}
+
+.welcome p {
+    color: var(--muted);
+}
+
+/* STATS */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 20px;
+}
+
+.stat strong {
+    display: block;
+    color: var(--heading);
+    font-size: 25px;
+    margin-bottom: 4px;
+}
+
+.stat span {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* SECTION */
+
+.section-title {
+    color: var(--heading);
+    font-size: 22px;
+    margin-bottom: 16px;
+}
+
+/* QUICK ACTIONS */
+
+.quick-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 35px;
+}
+
+.quick-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 20px;
+    transition: .2s ease;
+}
+
+.quick-card:hover {
+    transform: translateY(-3px);
+}
+
+.quick-icon {
+    width: 43px;
+    height: 43px;
+    border-radius: 9px;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.quick-card h3 {
+    color: var(--heading);
+    font-size: 16px;
+    margin-bottom: 6px;
+}
+
+.quick-card p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* COURSES */
+
+.course-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.course-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 21px;
+}
+
+.course-card small {
+    color: var(--primary);
+    font-weight: 800;
+}
+
+.course-card h3 {
+    color: var(--heading);
+    margin: 7px 0;
+}
+
+.course-card p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 17px;
+}
+
+.course-btn {
+    display: inline-block;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+/* PROFILE */
+
+.profile-box {
+    margin-top: 35px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 22px;
+}
+
+.profile-box h2 {
+    color: var(--heading);
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.profile-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 13px;
+}
+
+.profile-item {
+    background: var(--surface-2);
+    border-radius: 9px;
+    padding: 13px;
+}
+
+.profile-item span {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 4px;
+}
+
+.profile-item strong {
+    color: var(--heading);
+    font-size: 14px;
+}
+
+/* LOGOUT */
+
+.logout {
+    margin-top: 25px;
+    width: 100%;
+    padding: 13px;
+    border: 1px solid var(--danger);
+    border-radius: 9px;
+    background: transparent;
+    color: var(--danger);
+    cursor: pointer;
+    font-weight: 700;
+}
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+
+    .menu-btn {
+        display: block;
+    }
+
+    .stats,
+    .quick-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .course-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .nav-container {
+        padding: 11px 15px;
+    }
+
+    .logo {
+        font-size: 14px;
+    }
+
+    .page {
+        padding: 22px 15px 50px;
+    }
+
+    .welcome {
+        padding: 22px;
+    }
+
+    .welcome h1 {
+        font-size: 25px;
+    }
+
+    .stats,
+    .quick-grid,
+    .profile-info {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat {
+        padding: 16px;
+    }
+
+    .stat strong {
+        font-size: 21px;
+    }
+
+    .quick-card {
+        padding: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+
+<nav class="navbar">
+
+    <div class="nav-container">
+
+        <a href="dashboard.html" class="logo">
+            <div class="logo-icon">M</div>
+            MedIntellect Academy
+        </a>
+
+        <div class="nav-actions">
+
+            <button
+                class="theme-btn"
+                id="themeBtn">
+                🌙
+            </button>
+
+            <button
+                class="menu-btn"
+                id="menuBtn">
+                ☰
+            </button>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- DASHBOARD -->
+
+<main class="page">
+
+    <section class="welcome">
+
+        <small>Student Dashboard</small>
+
+        <h1>
+            Welcome, <span id="studentName">Student</span>
+        </h1>
+
+        <p>
+            Keep learning, practise regularly and stay prepared
+            for your examinations.
+        </p>
+
+    </section>
+
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+        <div class="stat">
+            <strong>0</strong>
+            <span>Courses</span>
+        </div>
+
+        <div class="stat">
+            <strong>0</strong>
+            <span>Quizzes Completed</span>
+        </div>
+
+        <div class="stat">
+            <strong>0%</strong>
+            <span>Average Score</span>
+        </div>
+
+        <div class="stat">
+            <strong>0</strong>
+            <span>Materials Viewed</span>
+        </div>
+
+    </div>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <h2 class="section-title">
+        Study Centre
+    </h2>
+
+    <div class="quick-grid">
+
+        <a href="#" class="quick-card">
+
+            <div class="quick-icon">
+                SM
+            </div>
+
+            <h3>Study Materials</h3>
+
+            <p>
+                Access your lecture notes and learning materials.
+            </p>
+
+        </a>
+
+
+        <a href="#" class="quick-card">
+
+            <div class="quick-icon">
+                QZ
+            </div>
+
+            <h3>Practice Quiz</h3>
+
+            <p>
+                Test yourself with topic-based questions.
+            </p>
+
+        </a>
+
+
+        <a href="#" class="quick-card">
+
+            <div class="quick-icon">
+                PQ
+            </div>
+
+            <h3>Past Questions</h3>
+
+            <p>
+                Practise with previous examination questions.
+            </p>
+
+        </a>
+
+
+        <a href="#" class="quick-card">
+
+            <div class="quick-icon">
+                EP
+            </div>
+
+            <h3>Exam Preparation</h3>
+
+            <p>
+                Prepare for upcoming examinations.
+            </p>
+
+        </a>
+
+    </div>
+
+
+    <!-- COURSES -->
+
+    <h2 class="section-title">
+        My Courses
+    </h2>
+
+    <div class="course-list">
+
+        <div class="course-card">
+
+            <small>NURSING</small>
+
+            <h3>
+                Foundation of Nursing
+            </h3>
+
+            <p>
+                Course materials, revision and practice.
+            </p>
+
+            <a href="#" class="course-btn">
+                Open Course →
+            </a>
+
+        </div>
+
+
+        <div class="course-card">
+
+            <small>PHYSIOLOGY</small>
+
+            <h3>
+                GIT Physiology
+            </h3>
+
+            <p>
+                Learn the gastrointestinal system and its physiology.
+            </p>
+
+            <a href="#" class="course-btn">
+                Open Course →
+            </a>
+
+        </div>
+
+
+        <div class="course-card">
+
+            <small>CHEMISTRY</small>
+
+            <h3>
+                CHM 102
+            </h3>
+
+            <p>
+                Study materials, revision and practice questions.
+            </p>
+
+            <a href="#" class="course-btn">
+                Open Course →
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- PROFILE -->
+
+    <section class="profile-box">
+
+        <h2>
+            My Profile
+        </h2>
+
+        <div class="profile-info">
+
+            <div class="profile-item">
+
+                <span>Full Name</span>
+
+                <strong id="profileName">
+                    Loading...
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>Email</span>
+
+                <strong id="profileEmail">
+                    Loading...
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>Level</span>
+
+                <strong id="profileLevel">
+                    Loading...
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>Department</span>
+
+                <strong id="profileDepartment">
+                    Loading...
+                </strong>
+
+            </div>
+
+
+            <div class="profile-item">
+
+                <span>University</span>
+
+                <strong id="profileUniversity">
+                    Loading...
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="logout"
+            id="logoutBtn">
+            Log Out
+        </button>
+
+    </section>
+
+</main>
+
+
+<script>
+
+/* =========================
+   THEME
+========================= */
+
+const themeBtn =
+    document.getElementById("themeBtn");
+
+const savedTheme =
+    localStorage.getItem("medintellect-theme");
+
+if (savedTheme === "dark") {
+
+    document.body.classList.add("dark");
+    themeBtn.textContent = "☀️";
+
+}
+
+themeBtn.addEventListener("click", function() {
+
+    document.body.classList.toggle("dark");
+
+    const dark =
+        document.body.classList.contains("dark");
+
+    themeBtn.textContent =
+        dark ? "☀️" : "🌙";
+
+    localStorage.setItem(
+        "medintellect-theme",
+        dark ? "dark" : "light"
+    );
+
+});
+
+
+/* =========================
+   LOAD USER
+========================= */
+
+async function loadStudent() {
+
+    const {
+        data: {
+            session
+        }
+    } = await supabaseClient.auth.getSession();
+
+
+    /* Not logged in */
+
+    if (!session) {
+
+        window.location.href =
+            "login.html";
+
+        return;
+
+    }
+
+
+    const user =
+        session.user;
+
+
+    const metadata =
+        user.user_metadata || {};
+
+
+    const fullName =
+        metadata.full_name ||
+        "Student";
+
+    const level =
+        metadata.level ||
+        "Not provided";
+
+    const department =
+        metadata.department ||
+        "Not provided";
+
+    const university =
+        metadata.university ||
+        "Not provided";
+
+
+    document.getElementById(
+        "studentName"
+    ).textContent = fullName;
+
+
+    document.getElementById(
+        "profileName"
+    ).textContent = fullName;
+
+
+    document.getElementById(
+        "profileEmail"
+    ).textContent =
+        user.email || "Not available";
+
+
+    document.getElementById(
+        "profileLevel"
+    ).textContent = level;
+
+
+    document.getElementById(
+        "profileDepartment"
+    ).textContent = department;
+
+
+    document.getElementById(
+        "profileUniversity"
+    ).textContent = university;
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+document.getElementById(
+    "logoutBtn"
+).addEventListener("click", async function() {
+
+    await supabaseClient.auth.signOut();
+
+    window.location.href =
+        "login.html";
+
+});
+
+
+/* =========================
+   START
+========================= */
+
+loadStudent();
+
+</script>
+
+</body>
+</html>
