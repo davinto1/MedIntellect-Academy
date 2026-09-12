@@ -68,9 +68,7 @@ button {
     font-family: inherit;
 }
 
-/* =========================
-   NAVIGATION
-========================= */
+/* NAVIGATION */
 
 .navbar {
     position: sticky;
@@ -178,9 +176,7 @@ button {
     font-size: 21px;
 }
 
-/* =========================
-   MOBILE MENU
-========================= */
+/* MOBILE MENU */
 
 .mobile-overlay {
     position: fixed;
@@ -285,9 +281,7 @@ button {
     color: white;
 }
 
-/* =========================
-   HERO
-========================= */
+/* HERO */
 
 .hero {
     background: var(--surface);
@@ -358,9 +352,7 @@ button {
     border: 1px solid var(--border);
 }
 
-/* =========================
-   DASHBOARD PREVIEW
-========================= */
+/* DASHBOARD PREVIEW */
 
 .hero-card {
     background: var(--surface-2);
@@ -447,9 +439,7 @@ button {
     font-size: 11px;
 }
 
-/* =========================
-   SECTIONS
-========================= */
+/* SECTIONS */
 
 section {
     padding: 80px 24px;
@@ -475,9 +465,7 @@ section {
     max-width: 650px;
 }
 
-/* =========================
-   COURSES
-========================= */
+/* COURSES */
 
 .courses {
     background: var(--bg);
@@ -527,9 +515,7 @@ section {
     font-weight: 800;
 }
 
-/* =========================
-   STUDY TOOLS
-========================= */
+/* STUDY TOOLS */
 
 .tools {
     background: var(--surface);
@@ -572,9 +558,7 @@ section {
     font-size: 13px;
 }
 
-/* =========================
-   COMMUNITY
-========================= */
+/* COMMUNITY */
 
 .community {
     background: var(--primary);
@@ -609,9 +593,7 @@ section {
     white-space: nowrap;
 }
 
-/* =========================
-   FOOTER
-========================= */
+/* FOOTER */
 
 footer {
     background: var(--footer);
@@ -660,9 +642,7 @@ footer {
     font-size: 12px;
 }
 
-/* =========================
-   TABLET
-========================= */
+/* TABLET */
 
 @media (max-width: 900px) {
 
@@ -698,9 +678,7 @@ footer {
     }
 }
 
-/* =========================
-   MOBILE
-========================= */
+/* MOBILE */
 
 @media (max-width: 600px) {
 
@@ -773,10 +751,6 @@ footer {
 
 <body>
 
-<!-- =========================
-     NAVIGATION
-========================= -->
-
 <nav class="navbar">
 
     <div class="nav-container">
@@ -802,8 +776,13 @@ footer {
                 🌙
             </button>
 
-            <a href="#" class="login-btn">Log in</a>
-            <a href="#" class="signup-btn">Sign Up</a>
+            <a href="login.html" class="login-btn">
+                Log in
+            </a>
+
+            <a href="signup.html" class="signup-btn">
+                Sign Up
+            </a>
 
         </div>
 
@@ -819,12 +798,8 @@ footer {
 </nav>
 
 
-<!-- MOBILE OVERLAY -->
-
 <div class="mobile-overlay" id="mobileOverlay"></div>
 
-
-<!-- MOBILE MENU -->
 
 <nav class="mobile-menu" id="mobileMenu">
 
@@ -855,11 +830,11 @@ footer {
 
     <div class="mobile-menu-actions">
 
-        <a href="#" class="mobile-login">
+        <a href="login.html" class="mobile-login">
             Login
         </a>
 
-        <a href="#" class="mobile-signup">
+        <a href="signup.html" class="mobile-signup">
             Create Account
         </a>
 
@@ -868,13 +843,7 @@ footer {
 </nav>
 
 
-<!-- =========================
-     MAIN
-========================= -->
-
 <main>
-
-<!-- HERO -->
 
 <section class="hero" id="home">
 
@@ -903,7 +872,7 @@ footer {
                     Explore Courses
                 </a>
 
-                <a href="#materials" class="secondary-btn">
+                <a href="signup.html" class="secondary-btn">
                     Start Studying
                 </a>
 
@@ -974,8 +943,6 @@ footer {
 </section>
 
 
-<!-- COURSES -->
-
 <section class="courses" id="courses">
 
     <div class="section-container">
@@ -1004,7 +971,7 @@ footer {
                     principles and professional foundations.
                 </p>
 
-                <a href="#" class="course-link">
+                <a href="signup.html" class="course-link">
                     Start Learning →
                 </a>
 
@@ -1022,7 +989,7 @@ footer {
                     gastrointestinal system and its processes.
                 </p>
 
-                <a href="#" class="course-link">
+                <a href="signup.html" class="course-link">
                     Start Learning →
                 </a>
 
@@ -1040,7 +1007,7 @@ footer {
                     revision and practice questions.
                 </p>
 
-                <a href="#" class="course-link">
+                <a href="signup.html" class="course-link">
                     Start Learning →
                 </a>
 
@@ -1052,8 +1019,6 @@ footer {
 
 </section>
 
-
-<!-- STUDY TOOLS -->
 
 <section class="tools" id="materials">
 
@@ -1134,8 +1099,6 @@ footer {
 </section>
 
 
-<!-- COMMUNITY -->
-
 <section class="community" id="community">
 
     <div class="community-container">
@@ -1152,7 +1115,7 @@ footer {
 
         </div>
 
-        <a href="#" class="community-btn">
+        <a href="signup.html" class="community-btn">
             Join Community
         </a>
 
@@ -1162,10 +1125,6 @@ footer {
 
 </main>
 
-
-<!-- =========================
-     FOOTER
-========================= -->
 
 <footer>
 
@@ -1215,10 +1174,10 @@ footer {
 
                 <h4>Account</h4>
 
-                <a href="#">Log in</a>
-                <a href="#">Create Account</a>
-                <a href="#">Profile</a>
-                <a href="#">Help</a>
+                <a href="login.html">Log in</a>
+                <a href="signup.html">Create Account</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="login.html">Help</a>
 
             </div>
 
@@ -1244,11 +1203,8 @@ footer {
 
 <script>
 
-/* =========================
-   LIGHT / DARK MODE
-========================= */
-
-const themeToggle = document.getElementById("themeToggle");
+const themeToggle =
+    document.getElementById("themeToggle");
 
 const savedTheme =
     localStorage.getItem("medintellect-theme");
@@ -1265,26 +1221,16 @@ themeToggle.addEventListener("click", function () {
     const darkMode =
         document.body.classList.contains("dark");
 
-    if (darkMode) {
-        themeToggle.textContent = "☀️";
-        localStorage.setItem(
-            "medintellect-theme",
-            "dark"
-        );
-    } else {
-        themeToggle.textContent = "🌙";
-        localStorage.setItem(
-            "medintellect-theme",
-            "light"
-        );
-    }
+    themeToggle.textContent =
+        darkMode ? "☀️" : "🌙";
+
+    localStorage.setItem(
+        "medintellect-theme",
+        darkMode ? "dark" : "light"
+    );
 
 });
 
-
-/* =========================
-   MOBILE MENU
-========================= */
 
 const menuBtn =
     document.getElementById("menuBtn");
@@ -1354,8 +1300,6 @@ window.addEventListener("resize", function() {
 
 });
 
-
-/* ESCAPE KEY */
 
 document.addEventListener("keydown", function(event) {
 
