@@ -1,827 +1,633 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Dashboard | MedIntellect Academy</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
-
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-:root {
-    --primary: #123b73;
-    --primary-light: #edf4ff;
-    --bg: #f7f9fc;
-    --surface: #ffffff;
-    --surface-2: #f3f6fb;
-    --text: #172033;
-    --heading: #111827;
-    --muted: #697386;
-    --border: #e3e8f0;
-    --danger: #c62828;
-}
-
-body.dark {
-    --primary: #72aaff;
-    --primary-light: #1c3558;
-    --bg: #0b1220;
-    --surface: #111a2b;
-    --surface-2: #162238;
-    --text: #e6edf7;
-    --heading: #ffffff;
-    --muted: #aab5c7;
-    --border: #26344a;
-}
-
-body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: Arial, Helvetica, sans-serif;
-    transition: .25s ease;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-button {
-    font-family: inherit;
-}
-
-/* NAVIGATION */
-
-.navbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-}
-
-.nav-container {
-    max-width: 1250px;
-    margin: auto;
-    padding: 13px 22px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    color: var(--primary);
-    font-weight: 800;
-    margin-right: auto;
-}
-
-.logo-icon {
-    width: 39px;
-    height: 39px;
-    border-radius: 9px;
-    background: var(--primary);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.nav-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.theme-btn,
-.menu-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 9px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    cursor: pointer;
-}
-
-.menu-btn {
-    display: none;
-    font-size: 20px;
-}
-
-/* PAGE */
-
-.page {
-    max-width: 1250px;
-    margin: auto;
-    padding: 35px 22px 70px;
-}
-
-/* WELCOME */
-
-.welcome {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 28px;
-    margin-bottom: 25px;
-}
-
-.welcome small {
-    color: var(--muted);
-}
-
-.welcome h1 {
-    color: var(--heading);
-    font-size: 30px;
-    margin: 5px 0;
-}
-
-.welcome p {
-    color: var(--muted);
-}
-
-/* STATS */
-
-.stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 30px;
-}
-
-.stat {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 13px;
-    padding: 20px;
-}
-
-.stat strong {
-    display: block;
-    color: var(--heading);
-    font-size: 25px;
-    margin-bottom: 4px;
-}
-
-.stat span {
-    color: var(--muted);
-    font-size: 13px;
-}
-
-/* SECTION */
-
-.section-title {
-    color: var(--heading);
-    font-size: 22px;
-    margin-bottom: 16px;
-}
-
-/* QUICK ACTIONS */
-
-.quick-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 35px;
-}
-
-.quick-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 13px;
-    padding: 20px;
-    transition: .2s ease;
-}
-
-.quick-card:hover {
-    transform: translateY(-3px);
-}
-
-.quick-icon {
-    width: 43px;
-    height: 43px;
-    border-radius: 9px;
-    background: var(--primary-light);
-    color: var(--primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    margin-bottom: 15px;
-}
-
-.quick-card h3 {
-    color: var(--heading);
-    font-size: 16px;
-    margin-bottom: 6px;
-}
-
-.quick-card p {
-    color: var(--muted);
-    font-size: 13px;
-}
-
-/* COURSES */
-
-.course-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-}
-
-.course-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 13px;
-    padding: 21px;
-}
-
-.course-card small {
-    color: var(--primary);
-    font-weight: 800;
-}
-
-.course-card h3 {
-    color: var(--heading);
-    margin: 7px 0;
-}
-
-.course-card p {
-    color: var(--muted);
-    font-size: 13px;
-    margin-bottom: 17px;
-}
-
-.course-btn {
-    display: inline-block;
-    color: var(--primary);
-    font-size: 13px;
-    font-weight: 800;
-}
-
-/* PROFILE */
-
-.profile-box {
-    margin-top: 35px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 13px;
-    padding: 22px;
-}
-
-.profile-box h2 {
-    color: var(--heading);
-    font-size: 20px;
-    margin-bottom: 15px;
-}
-
-.profile-info {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 13px;
-}
-
-.profile-item {
-    background: var(--surface-2);
-    border-radius: 9px;
-    padding: 13px;
-}
-
-.profile-item span {
-    display: block;
-    color: var(--muted);
-    font-size: 11px;
-    margin-bottom: 4px;
-}
-
-.profile-item strong {
-    color: var(--heading);
-    font-size: 14px;
-}
-
-/* LOGOUT */
-
-.logout {
-    margin-top: 25px;
-    width: 100%;
-    padding: 13px;
-    border: 1px solid var(--danger);
-    border-radius: 9px;
-    background: transparent;
-    color: var(--danger);
-    cursor: pointer;
-    font-weight: 700;
-}
-
-/* MOBILE */
-
-@media (max-width: 900px) {
-
-    .menu-btn {
-        display: block;
-    }
-
-    .stats,
-    .quick-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .course-list {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 600px) {
-
-    .nav-container {
-        padding: 11px 15px;
-    }
-
-    .logo {
-        font-size: 14px;
-    }
-
-    .page {
-        padding: 22px 15px 50px;
-    }
-
-    .welcome {
-        padding: 22px;
-    }
-
-    .welcome h1 {
-        font-size: 25px;
-    }
-
-    .stats,
-    .quick-grid,
-    .profile-info {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .stat {
-        padding: 16px;
-    }
-
-    .stat strong {
-        font-size: 21px;
-    }
-
-    .quick-card {
-        padding: 16px;
-    }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | MedIntellect Academy</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #f5f7fb;
+            --card: #ffffff;
+            --text: #172033;
+            --muted: #687386;
+            --primary: #2457d6;
+            --primary-dark: #1742aa;
+            --border: #e4e8f0;
+            --nav: #ffffff;
+            --success: #16834b;
+        }
+
+        body.dark {
+            --bg: #0f1420;
+            --card: #171d2b;
+            --text: #f1f4f9;
+            --muted: #9ca7b8;
+            --primary: #5f86ff;
+            --primary-dark: #4268dc;
+            --border: #283142;
+            --nav: #151b28;
+            --success: #45c987;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: 0.2s ease;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--nav);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: auto;
+            min-height: 68px;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-links a {
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--bg);
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn,
+        .menu-btn {
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .menu-btn {
+            display: none;
+        }
+
+        .mobile-menu {
+            display: none;
+            border-top: 1px solid var(--border);
+            padding: 10px 20px 15px;
+            background: var(--nav);
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 12px 8px;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px 20px 60px;
+        }
+
+        .welcome {
+            margin-bottom: 28px;
+        }
+
+        .welcome h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .stat {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .stat small {
+            color: var(--muted);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stat strong {
+            font-size: 27px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-title h2 {
+            font-size: 21px;
+        }
+
+        .section-title a {
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .action-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .action-card .icon {
+            font-size: 27px;
+            margin-bottom: 15px;
+        }
+
+        .action-card h3 {
+            margin-bottom: 8px;
+            font-size: 17px;
+        }
+
+        .action-card p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .course {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .course:last-child {
+            border-bottom: none;
+        }
+
+        .course h3 {
+            margin-bottom: 5px;
+        }
+
+        .course p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .profile-item {
+            margin-bottom: 17px;
+        }
+
+        .profile-item small {
+            display: block;
+            color: var(--muted);
+            margin-bottom: 5px;
+        }
+
+        .profile-item strong {
+            font-size: 15px;
+        }
+
+        .profile-link {
+            display: block;
+            margin-top: 18px;
+            padding: 11px;
+            text-align: center;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            font-size: 14px;
+        }
+
+        .logout {
+            margin-top: 20px;
+            width: 100%;
+            padding: 11px;
+            border-radius: 8px;
+            border: 1px solid #d9534f;
+            background: transparent;
+            color: #d9534f;
+            cursor: pointer;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--muted);
+        }
+
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .action-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            main {
+                padding: 25px 15px 45px;
+            }
+
+            .welcome h1 {
+                font-size: 25px;
+            }
+
+            .stats,
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                padding: 0 15px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- NAVIGATION -->
-
-<nav class="navbar">
-
+<nav>
     <div class="nav-container">
 
-        <a href="dashboard.html" class="logo">
-            <div class="logo-icon">M</div>
+        <a href="dashboard.html" class="brand">
             MedIntellect Academy
         </a>
 
-        <div class="nav-actions">
+        <div class="nav-links">
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="materials.html">Study Materials</a>
+            <a href="quizzes.html">Practice Quiz</a>
+            <a href="exam-prep.html">Exam Preparation</a>
+            <a href="community.html">Community</a>
+            <a href="profile.html">Profile</a>
+            <a href="settings.html">Settings</a>
+        </div>
 
-            <button
-                class="theme-btn"
-                id="themeBtn">
-                🌙
+        <div class="nav-actions">
+            <button class="icon-btn" id="themeBtn" title="Change theme">
+                ☀
             </button>
 
-            <button
-                class="menu-btn"
-                id="menuBtn">
+            <button class="menu-btn" id="menuBtn">
                 ☰
             </button>
-
         </div>
 
     </div>
 
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="materials.html">Study Materials</a>
+        <a href="quizzes.html">Practice Quiz</a>
+        <a href="exam-prep.html">Exam Preparation</a>
+        <a href="community.html">Community</a>
+        <a href="profile.html">Profile</a>
+        <a href="settings.html">Settings</a>
+    </div>
 </nav>
 
+<div id="loading" class="loading">
+    Checking your account...
+</div>
 
-<!-- DASHBOARD -->
-
-<main class="page">
+<main id="dashboard" style="display:none;">
 
     <section class="welcome">
-
-        <small>Student Dashboard</small>
-
-        <h1>
-            Welcome, <span id="studentName">Student</span>
-        </h1>
-
+        <h1>Welcome back, <span id="studentName">Student</span></h1>
         <p>
-            Keep learning, practise regularly and stay prepared
-            for your examinations.
+            Continue your studies, practise what you have learnt and prepare
+            properly for your examinations.
         </p>
+    </section>
+
+    <section class="stats">
+
+        <div class="stat">
+            <small>Courses</small>
+            <strong>3</strong>
+        </div>
+
+        <div class="stat">
+            <small>Materials</small>
+            <strong>0</strong>
+        </div>
+
+        <div class="stat">
+            <small>Quizzes Completed</small>
+            <strong>0</strong>
+        </div>
+
+        <div class="stat">
+            <small>Progress</small>
+            <strong>0%</strong>
+        </div>
 
     </section>
 
-
-    <!-- STATS -->
-
-    <div class="stats">
-
-        <div class="stat">
-            <strong>0</strong>
-            <span>Courses</span>
-        </div>
-
-        <div class="stat">
-            <strong>0</strong>
-            <span>Quizzes Completed</span>
-        </div>
-
-        <div class="stat">
-            <strong>0%</strong>
-            <span>Average Score</span>
-        </div>
-
-        <div class="stat">
-            <strong>0</strong>
-            <span>Materials Viewed</span>
-        </div>
-
+    <div class="section-title">
+        <h2>What do you want to do?</h2>
     </div>
 
+    <section class="action-grid">
 
-    <!-- QUICK ACTIONS -->
-
-    <h2 class="section-title">
-        Study Centre
-    </h2>
-
-    <div class="quick-grid">
-
-        <a href="#" class="quick-card">
-
-            <div class="quick-icon">
-                SM
-            </div>
-
+        <a href="materials.html" class="action-card">
+            <div class="icon">📚</div>
             <h3>Study Materials</h3>
-
             <p>
-                Access your lecture notes and learning materials.
+                Access lecture notes, PDFs, slides and other study materials
+                organised by course.
             </p>
-
         </a>
 
-
-        <a href="#" class="quick-card">
-
-            <div class="quick-icon">
-                QZ
-            </div>
-
+        <a href="quizzes.html" class="action-card">
+            <div class="icon">📝</div>
             <h3>Practice Quiz</h3>
-
             <p>
-                Test yourself with topic-based questions.
+                Test your understanding with course-based practice questions
+                and quizzes.
             </p>
-
         </a>
 
-
-        <a href="#" class="quick-card">
-
-            <div class="quick-icon">
-                PQ
-            </div>
-
-            <h3>Past Questions</h3>
-
-            <p>
-                Practise with previous examination questions.
-            </p>
-
-        </a>
-
-
-        <a href="#" class="quick-card">
-
-            <div class="quick-icon">
-                EP
-            </div>
-
+        <a href="exam-prep.html" class="action-card">
+            <div class="icon">🎓</div>
             <h3>Exam Preparation</h3>
-
             <p>
-                Prepare for upcoming examinations.
+                Prepare with past questions, revision materials and mock
+                examinations.
             </p>
-
         </a>
 
+        <a href="community.html" class="action-card">
+            <div class="icon">💬</div>
+            <h3>Community</h3>
+            <p>
+                Connect with other students, discuss academic topics and learn
+                together.
+            </p>
+        </a>
+
+    </section>
+
+    <div class="section-title">
+        <h2>My Courses</h2>
+        <a href="materials.html">View all</a>
     </div>
 
+    <section class="content-grid">
 
-    <!-- COURSES -->
+        <div class="panel">
 
-    <h2 class="section-title">
-        My Courses
-    </h2>
+            <div class="course">
+                <h3>Foundation of Nursing</h3>
+                <p>
+                    Nursing principles, concepts and professional foundations.
+                </p>
+            </div>
 
-    <div class="course-list">
+            <div class="course">
+                <h3>GIT Physiology</h3>
+                <p>
+                    Physiology of the gastrointestinal tract and digestion.
+                </p>
+            </div>
 
-        <div class="course-card">
+            <div class="course">
+                <h3>CHM 102</h3>
+                <p>
+                    Chemistry concepts relevant to your course of study.
+                </p>
+            </div>
 
-            <small>NURSING</small>
+        </div>
 
-            <h3>
-                Foundation of Nursing
-            </h3>
+        <div class="panel">
 
-            <p>
-                Course materials, revision and practice.
-            </p>
+            <div class="section-title">
+                <h2>My Profile</h2>
+            </div>
 
-            <a href="#" class="course-btn">
-                Open Course →
+            <div class="profile-item">
+                <small>Name</small>
+                <strong id="profileName">Loading...</strong>
+            </div>
+
+            <div class="profile-item">
+                <small>Level</small>
+                <strong id="profileLevel">Loading...</strong>
+            </div>
+
+            <div class="profile-item">
+                <small>Department</small>
+                <strong id="profileDepartment">Loading...</strong>
+            </div>
+
+            <div class="profile-item">
+                <small>University</small>
+                <strong id="profileUniversity">Loading...</strong>
+            </div>
+
+            <a href="profile.html" class="profile-link">
+                Edit Profile
             </a>
 
-        </div>
-
-
-        <div class="course-card">
-
-            <small>PHYSIOLOGY</small>
-
-            <h3>
-                GIT Physiology
-            </h3>
-
-            <p>
-                Learn the gastrointestinal system and its physiology.
-            </p>
-
-            <a href="#" class="course-btn">
-                Open Course →
-            </a>
+            <button class="logout" id="logoutBtn">
+                Log out
+            </button>
 
         </div>
-
-
-        <div class="course-card">
-
-            <small>CHEMISTRY</small>
-
-            <h3>
-                CHM 102
-            </h3>
-
-            <p>
-                Study materials, revision and practice questions.
-            </p>
-
-            <a href="#" class="course-btn">
-                Open Course →
-            </a>
-
-        </div>
-
-    </div>
-
-
-    <!-- PROFILE -->
-
-    <section class="profile-box">
-
-        <h2>
-            My Profile
-        </h2>
-
-        <div class="profile-info">
-
-            <div class="profile-item">
-
-                <span>Full Name</span>
-
-                <strong id="profileName">
-                    Loading...
-                </strong>
-
-            </div>
-
-
-            <div class="profile-item">
-
-                <span>Email</span>
-
-                <strong id="profileEmail">
-                    Loading...
-                </strong>
-
-            </div>
-
-
-            <div class="profile-item">
-
-                <span>Level</span>
-
-                <strong id="profileLevel">
-                    Loading...
-                </strong>
-
-            </div>
-
-
-            <div class="profile-item">
-
-                <span>Department</span>
-
-                <strong id="profileDepartment">
-                    Loading...
-                </strong>
-
-            </div>
-
-
-            <div class="profile-item">
-
-                <span>University</span>
-
-                <strong id="profileUniversity">
-                    Loading...
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <button
-            class="logout"
-            id="logoutBtn">
-            Log Out
-        </button>
 
     </section>
 
 </main>
 
-
 <script>
+    const themeBtn = document.getElementById("themeBtn");
+    const menuBtn = document.getElementById("menuBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
 
-/* =========================
-   THEME
-========================= */
+    function applyTheme() {
+        const theme = localStorage.getItem("medintellect-theme");
 
-const themeBtn =
-    document.getElementById("themeBtn");
-
-const savedTheme =
-    localStorage.getItem("medintellect-theme");
-
-if (savedTheme === "dark") {
-
-    document.body.classList.add("dark");
-    themeBtn.textContent = "☀️";
-
-}
-
-themeBtn.addEventListener("click", function() {
-
-    document.body.classList.toggle("dark");
-
-    const dark =
-        document.body.classList.contains("dark");
-
-    themeBtn.textContent =
-        dark ? "☀️" : "🌙";
-
-    localStorage.setItem(
-        "medintellect-theme",
-        dark ? "dark" : "light"
-    );
-
-});
-
-
-/* =========================
-   LOAD USER
-========================= */
-
-async function loadStudent() {
-
-    const {
-        data: {
-            session
+        if (theme === "dark") {
+            document.body.classList.add("dark");
+            themeBtn.textContent = "☾";
+        } else {
+            document.body.classList.remove("dark");
+            themeBtn.textContent = "☀";
         }
-    } = await supabaseClient.auth.getSession();
-
-
-    /* Not logged in */
-
-    if (!session) {
-
-        window.location.href =
-            "login.html";
-
-        return;
-
     }
 
+    themeBtn.addEventListener("click", () => {
+        const dark = document.body.classList.toggle("dark");
 
-    const user =
-        session.user;
+        localStorage.setItem(
+            "medintellect-theme",
+            dark ? "dark" : "light"
+        );
 
+        themeBtn.textContent = dark ? "☾" : "☀";
+    });
 
-    const metadata =
-        user.user_metadata || {};
+    menuBtn.addEventListener("click", () => {
+        mobileMenu.style.display =
+            mobileMenu.style.display === "block"
+                ? "none"
+                : "block";
+    });
 
+    applyTheme();
 
-    const fullName =
-        metadata.full_name ||
-        "Student";
+    async function loadDashboard() {
 
-    const level =
-        metadata.level ||
-        "Not provided";
+        const {
+            data: { session },
+            error
+        } = await supabaseClient.auth.getSession();
 
-    const department =
-        metadata.department ||
-        "Not provided";
+        if (error || !session) {
+            window.location.href = "login.html";
+            return;
+        }
 
-    const university =
-        metadata.university ||
-        "Not provided";
+        const user = session.user;
+        const metadata = user.user_metadata || {};
 
+        const name = metadata.full_name || "Student";
+        const level = metadata.level || "Not provided";
+        const department = metadata.department || "Not provided";
+        const university = metadata.university || "Not provided";
 
-    document.getElementById(
-        "studentName"
-    ).textContent = fullName;
+        document.getElementById("studentName").textContent = name;
 
+        document.getElementById("profileName").textContent = name;
+        document.getElementById("profileLevel").textContent = level;
+        document.getElementById("profileDepartment").textContent = department;
+        document.getElementById("profileUniversity").textContent = university;
 
-    document.getElementById(
-        "profileName"
-    ).textContent = fullName;
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+    }
 
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
 
-    document.getElementById(
-        "profileEmail"
-    ).textContent =
-        user.email || "Not available";
+        const { error } = await supabaseClient.auth.signOut();
 
+        if (error) {
+            alert(error.message);
+            return;
+        }
 
-    document.getElementById(
-        "profileLevel"
-    ).textContent = level;
+        window.location.href = "login.html";
+    });
 
-
-    document.getElementById(
-        "profileDepartment"
-    ).textContent = department;
-
-
-    document.getElementById(
-        "profileUniversity"
-    ).textContent = university;
-
-}
-
-
-/* =========================
-   LOGOUT
-========================= */
-
-document.getElementById(
-    "logoutBtn"
-).addEventListener("click", async function() {
-
-    await supabaseClient.auth.signOut();
-
-    window.location.href =
-        "login.html";
-
-});
-
-
-/* =========================
-   START
-========================= */
-
-loadStudent();
-
+    loadDashboard();
 </script>
 
 </body>
